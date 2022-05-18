@@ -1,0 +1,117 @@
+#bienvenido, #registro, #novedades{
+    border: 1px solid;
+    background-color: var(--primary-color);
+    border-radius: 3em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#bienvenido{
+    width: 80%;
+    height: 35vh;
+    background-image: url("../img/fondos/frutas-y-verduras-no-solo-importa-la-cantidad-tambien-la-variedad_34c75822_1280x720.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#bienvenido h1{
+    background-color: #ffffff7a;
+}
+
+#bienvenido button{
+    width: 50%;
+}
+
+#regNov{
+    width: 80%;
+    display: flex;
+    margin-top: 1%;
+    gap: 2%;
+}
+
+#registro, #novedades{
+    width: 50%;
+    height: auto;
+}
+
+#registro div{
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1%;
+}
+
+#registro button{
+    width: 50%;
+}
+
+#imgNov{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-left: 4%;
+    margin-right: 4%;
+    height: 75%;
+    margin-bottom: 6vh;
+    justify-items: center;
+}
+
+#imgNov div{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    height: 80%;
+    background-color: white;
+    border-radius: 2em;
+}
+
+#imgNov div img{
+    max-width: 100%;
+    max-height: 100%;
+}
+
+#imgNov div a{
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    color: black;
+    font-weight: bold;
+    font-size: 2em;
+}
+
+#imgNov div a:hover{
+    opacity: 0.7;
+    background-color: var(--primary-color);
+}
+
+@media (max-device-width: 850px){
+    #imgNov{
+        grid-template-columns: 1fr;
+    }
+
+    #imgNov div a{
+        font-size: 1.2em;
+    }
+}
+
+@media (min-width: 850px) and (max-width: 1200px) {
+    #imgNov div a{
+        font-size: 1.39em;
+    }
+}
+
+@media (prefers-color-scheme: dark){
+    #bienvenido h1{
+        color: black;
+    }
+    
+    #imgNov div a{
+        color: var(--secondary-color);
+    }
+}

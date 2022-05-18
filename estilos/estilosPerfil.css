@@ -1,0 +1,37 @@
+section{
+    border: 1px solid;
+    background-color: var(--primary-color);
+    border-radius: 3em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#perfil{
+    width: 80%;
+}
+
+#perfil h1{
+    margin-bottom: 0;
+}
+
+#perfil div{
+    align-self: start;
+}
+
+#perfil div ul{
+    margin-top: 0;
+}
+
+#comprasCup{
+    width: 80%;
+    display: flex;
+    margin-top: 1%;
+    gap: 2%;
+}
+
+#comprasCup section{
+    width: 50%;
+    height: auto;
+}
