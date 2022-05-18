@@ -5,7 +5,7 @@ class CabeceraFooter {
     function cabecera() {
         $url = "http://" . $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"] . "/perperpab/Mercadonha/html-php/";
         $carpeta = $_SERVER["DOCUMENT_ROOT"] . "/perperpab/Mercadonha/html-php/";
-        $urlIndex = "http://" . $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"] . "/perperpab/Mercadonha/public_html/";
+        $urlIndex = "http://" . $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"] . "/perperpab/Mercadonha/";
         require_once $carpeta . 'archivosBD/ProductosBD.php';
         require_once $carpeta . 'archivosBD/UsuariosBD.php';
         $productosBD = new ProductosBD();
