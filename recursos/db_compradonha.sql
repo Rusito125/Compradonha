@@ -65,17 +65,20 @@ id int auto_increment NOT NULL,
 nombre varchar(20) NOT NULL,     
 descripcion varchar(500),
 fecha datetime NOT NULL,     
-precio double NOT NULL,    
+precio double NOT NULL,  
+inventario int NOT NULL,  
 imagen LONGBLOB NOT NULL,
 id_tipo int NOT NULL,     
 primary key Productos(id),     
-foreign key (id_tipo) references Tipos_Producto(id) on delete restrict 
+foreign key (id_tipo) references Tipos_Producto(id) on delete restrict,
+constraint CK_Inventario_Positivos CHECK (inventario >= 0)
 ) engine = InnoDB;
 
 CREATE TABLE Usuario_Producto(  
 id_usuario int NOT NULL,     
 id_producto int NOT NULL,      
-fecha datetime NOT NULL,     
+fecha datetime NOT NULL,
+cantidad int NOT NULL,     
 foreign key (id_usuario) references Usuarios(id) on delete cascade,     
 foreign key (id_producto) references Productos(id) on delete cascade 
 ) engine = InnoDB;
@@ -215,8 +218,6 @@ VALUES
 	(49, 7, 'Zamora'),
 	(50, 2, 'Zaragoza')
 ;
-
-
 
 
 /*INSERT INTO Productos values

@@ -12,6 +12,7 @@ if (isset($_GET["codComunidad"])) {
     foreach ($provincias as $provincia) {
         echo "<option value='" . $provincia["codProvincia"] . "'>" . $provincia["nombre"] . "</option>";
     }
+    $pdo = null;
 }
 
 class ComunidadesBD {
@@ -27,6 +28,7 @@ class ComunidadesBD {
         if ($result->rowCount() > 0) {
             $comunidades = $result->fetchAll();
         }
+        $pdo = null;
         return $comunidades;
     }
 

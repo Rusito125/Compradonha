@@ -1,7 +1,7 @@
 <?php
 class AccesoBD {
         var $dbtype = 'mysql';
-        var $dbname = 'db_mercadonha';
+        var $dbname = 'db_compradonha';
         var $dbhost = 'localhost';
         var $dbuser = 'root';
         var $dbpass = '';

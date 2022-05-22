@@ -19,6 +19,7 @@ body{
 
 body a{
     color: purple;
+    cursor: pointer;
 }
 
 body a:visited{
@@ -28,10 +29,15 @@ body a:visited{
 button{
     border-radius: 2em;
     background-color: lightcyan;
+    cursor: pointer;
 }
 
 button:hover{
     transform: scale(1.1);
+}
+
+.caja{
+    width: 70%;
 }
 
 header, footer{
@@ -59,6 +65,12 @@ header nav a{
 
 header nav a:hover{
     background-color: brown;
+}
+
+#cuadroBusqueda div{
+    display: none;
+    -webkit-transition: 1s;
+    transition: 1s;
 }
 
 #logo{
@@ -108,9 +120,15 @@ header nav a:hover{
     width: 60%;
 }
 
+.productoCarro h3{
+    margin-bottom: 0;
+}
+
 .productoCarro h4{
     display: flex;
     justify-content: space-between;
+    margin-top: 0;
+    margin-bottom: 0
 }
 
 .productoCarro a{
@@ -118,13 +136,14 @@ header nav a:hover{
 }
 
 .productoCarro a:hover{
-   background-color: unset;
+    background-color: unset;
 }
 
 .productoCarro img{
     max-width: 60%;
     max-height: 60%;
     height: auto;
+    cursor: pointer;
 }
 
 .mostrar a{

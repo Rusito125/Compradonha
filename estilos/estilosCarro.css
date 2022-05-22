@@ -1,9 +1,30 @@
-/*
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/css.css to edit this template
-*/
-/* 
-    Created on : 16 may 2022, 14:12:24
-    Author     : pipot
-*/
+#carroGordo{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 2vh;
+}
 
+#carroGordo .productoCarro img{
+    height: 40vh;
+}
+
+#carroGordo .productoCarro div{
+    font-size: 1.25em;
+    text-align: center;
+}
+
+#carroGordo .productoCarro div h4{
+    justify-content: center;
+}
+
+#carroGordo .productoCarro div h4 a{
+    margin-left: 1vw;
+}
+
+@media (max-device-width: 650px){
+    #carroGordo .productoCarro img{
+        height: 40vw;
+    }
+}

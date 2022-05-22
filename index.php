@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <!-- 
-     TODO:
-          falta no mostrar mini ventana de carrito cuando se acceda desde un móvil. En su lugar se redireccionará al usuario a carrito.php
-          falta cargar carro de base de datos
-          falta cuadro de búsqueda
+     TODO:          
           falta editar el section registro para mostrar datos del usuario cuando éste esté conectado
           falta contacto
           falta quienes somos
@@ -13,7 +10,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Mercadonha</title>
+        <title>Compradoña</title>
         <script src="https://kit.fontawesome.com/3b88ef1ad2.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" type="text/css" href="estilos/normalize.css"/>
         <link rel="stylesheet" type="text/css" href="estilos/estilos.css"/>
@@ -31,7 +28,7 @@
         ?>
         <main>
             <section id="bienvenido">
-                <h1>Bienvenido a Mercadoña</h1>
+                <h1>Bienvenido a Compradoña</h1>
                 <button onclick="location.href = 'html-php/productos/productos.php'">Empezar a comprar</button>
             </section>
             <div id="regNov">

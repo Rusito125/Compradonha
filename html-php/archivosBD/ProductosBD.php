@@ -15,18 +15,20 @@ class ProductosBD {
                 $producto = $result->fetch();
             }
         }
-        $result = $pdo->query("SELECT * FROM tipos_producto");
+        $result = $pdo->query("SELECT * FROM tipos_producto ORDER BY tipo");
         if ($result->rowCount() > 0) {
             $tiposProducto = $result->fetchAll();
             ?>
             <form method="post" enctype="multipart/form-data" id="miForm">
                 <h4>Añadir productos</h4>      
                 <label for="nombre">Nombre: </label>
-                <input type="text" name="nombre" value="<?= $id != null ? $producto["nombre"] : "" ?>"/>
+                <input type="text" name="nombre" value="<?= $id != null ? $producto["nombre"] : "" ?>" required/>
                 <label for="nombre">Descripción: </label>
-                <textarea size="500" name="descripcion" value="<?= $id != null ? $producto["descripcion"] : "" ?>"></textarea>
+                <textarea size="500" name="descripcion"><?= $id != null ? $producto["descripcion"] : "" ?></textarea>
                 <label for="precio">Precio: </label>
-                <input type="text" name="precio" pattern="^([0-9]*)(\.[0-9]{2})?$" value="<?= $id != null ? $producto["precio"] : "" ?>"/>
+                <input type="text" name="precio" pattern="^([0-9]*)(\.[0-9]{2})?$" value="<?= $id != null ? $producto["precio"] : "" ?>" required/>
+                <label for="inventario">Inventario: </label>
+                <input type="text" name="inventario" pattern="^[0-9]+$" value="<?= $id != null ? $producto["inventario"] : "" ?>" required/>
                 <label for="image">Imagen: </label>
                 <input type="file" accept="image/*" id="image" name="image" onchange="cargar()"/>
                 <?= $id != null ? '<img src="data:image/jpg;base64,' . base64_encode($producto['imagen']) . '" width="200px" height="100px" id="preview">' : "" ?>
@@ -64,7 +66,8 @@ class ProductosBD {
             <?php
         }
         if (isset($_POST["submit"])) {
-            if (isset($_POST["nombre"]) && isset($_POST["precio"])) {
+            // redundante
+            if (isset($_POST["nombre"]) && isset($_POST["precio"]) && isset($_POST["inventario"])) {
                 try {
                     if ($this->comprobarImagen($id)) {
                         $imgContenido = $producto['imagen'];
@@ -73,72 +76,78 @@ class ProductosBD {
                         $imgContenido = file_get_contents($image);
                     }
                     $nombre = $_POST["nombre"];
-                    if(isset($_POST["descripcion"])){
+                    if (isset($_POST["descripcion"])) {
                         $descripcion = $_POST["descripcion"];
-                    } else{
+                    } else {
                         $descripcion = null;
                     }
-                    $precio = $_POST["precio"];                    
+                    $precio = $_POST["precio"];
+                    $inventario = $_POST["inventario"];
                     $tipoP = $_POST["tipo"];
-                    if ($id != null) {
-                        $actualizar = $pdo->prepare("UPDATE Productos SET nombre=?, descripcion=?, precio = ?, imagen = ?, id_tipo = ? WHERE id=?");
-                        if ($actualizar->execute(array($nombre, $descripcion, $precio, $imgContenido, $tipoP, $id))) {
-                            ?>
-                            <script>
-                                location.href = "?action=ver";
-                            </script>
-                            <?php
+                    if ($imgContenido != null) {
+                        if ($id != null) {
+                            $actualizar = $pdo->prepare("UPDATE Productos SET nombre=?, descripcion=?, precio = ?, inventario = ?, imagen = ?, id_tipo = ? WHERE id=?");
+                            if ($actualizar->execute(array($nombre, $descripcion, $precio, $inventario, $imgContenido, $tipoP, $id))) {
+                                ?>
+                                <script>
+                                    location.href = "?action=ver";
+                                </script>
+                                <?php
+                            } else {
+                                echo "<h3>Ha fallado la actualización del producto</h3>";
+                            }
                         } else {
-                            echo "<h3>Ha fallado la actualización del producto</h3>";
+                            $insertar = $pdo->prepare("INSERT into Productos (id, nombre, descripcion, fecha, precio, inventario, imagen, id_tipo) VALUES (0,?,?,now(),?,?,?,?)");
+                            if ($insertar->execute(array($nombre, $descripcion, $precio, $inventario, $imgContenido, $tipoP))) {
+                                echo "<h3>Producto añadido corretamente.</h3>";
+                            } else {
+                                echo "<h3>Ha fallado la creación del producto.</h3>";
+                            }
                         }
                     } else {
-                        $insertar = $pdo->prepare("INSERT into Productos (id, nombre, descripcion, fecha, precio, imagen, id_tipo) VALUES (0,?,?,now(),?,?,?)");
-                        if ($insertar->execute(array($nombre, $descripcion, $precio, $imgContenido, $tipoP))) {
-                            echo "<h3>Producto añadido corretamente.</h3>";
-                        } else {
-                            echo "<h3>Ha fallado la creación del producto.</h3>";
-                        }
+                        echo "<h3 style='color: red'>Error al añadir/modificar un producto, asegúrese de que ha introducido todos los datos necesarios</h3>";
                     }
                 } catch (Exception $e) {
                     echo "Error! " . $e;
                     die();
                 }
             } else {
-                echo "<h3 style='color: red'>Error al añadir/modificar un producto, asegúrese de que ha introducido todos los datos</h3>";
+                echo "<h3 style='color: red'>Error al añadir/modificar un producto, asegúrese de que ha introducido todos los datos necesarios</h3>";
             }
         }
         $pdo = null;
     }
-    
+
     private function comprobarImagen($id) {
-            $existeImagen = false;
-            if ($_FILES["image"]["tmp_name"] != "") {
-                $revisar = getimagesize($_FILES["image"]["tmp_name"]);
-                if ($revisar !== false) {
-                    $existeImagen = false;
-                }
-            } else if ($id != null) {
-                $existeImagen = true;
+        $existeImagen = false;
+        if ($_FILES["image"]["tmp_name"] != "") {
+            $revisar = getimagesize($_FILES["image"]["tmp_name"]);
+            if ($revisar !== false) {
+                $existeImagen = false;
             }
-            return $existeImagen;
+        } else if ($id != null) {
+            $existeImagen = true;
         }
+        return $existeImagen;
+    }
 
     function verProductosGestor() {
         $pdo = new AccesoBD();
         $pdo = $pdo->abrirConexion();
-        $result = $pdo->query("SELECT p.id,p.nombre,p.descripcion,p.fecha,p.precio,p.imagen,tp.tipo FROM productos p JOIN tipos_producto tp ON p.id_tipo = tp.id ORDER BY p.fecha DESC");
+        $result = $pdo->query("SELECT p.id,p.nombre,p.descripcion,p.fecha,p.precio,p.inventario,p.imagen,tp.tipo FROM productos p JOIN tipos_producto tp ON p.id_tipo = tp.id ORDER BY p.fecha DESC");
 
         if ($result->rowCount() > 0) {
             $productos = $result->fetchAll();
             echo "<table border=1>";
-            echo "<tr><th>Nombre</th><th>Descripción</th><th>Fecha</th><th>Precio</th><th>Imagen</th><th>Tipo</th><th>Editar</th><th>Borrar</th></tr>";
+            echo "<tr><th>Nombre</th><th>Descripción</th><th>Fecha</th><th>Precio</th><th>Inventario</th><th>Imagen</th><th>Tipo</th><th>Editar</th><th>Borrar</th></tr>";
             foreach ($productos as $producto) {
                 ?>
                 <tr>
                     <td><?= $producto["nombre"] ?></td>
-                    <td><?=$producto["descripcion"]?></td>
+                    <td><?= $producto["descripcion"] ?></td>
                     <td><?= $producto["fecha"] ?></td>
                     <td><?= $producto["precio"] ?>€</td>
+                    <td><?= $producto["inventario"] ?></td>
                     <td><img src="data:image/jpg;base64,<?= base64_encode($producto['imagen']) ?>" width="200px" height="100px"></td>
                     <td><?= $producto["tipo"] ?></td>
                     <td><a href="?action=editar&id=<?= $producto["id"] ?>">Editar</a></td>
@@ -174,7 +183,7 @@ class ProductosBD {
         $pdo = new AccesoBD();
         $pdo = $pdo->abrirConexion();
 
-        $result = $pdo->query("SELECT p.id,p.nombre,p.descripcion,p.precio,p.fecha,p.imagen,tp.tipo FROM productos p JOIN tipos_producto tp ON p.id_tipo = tp.id ORDER BY p.fecha DESC");
+        $result = $pdo->query("SELECT p.id,p.nombre,p.descripcion,p.fecha,p.precio,p.inventario,p.imagen,p.id_tipo,tp.tipo FROM productos p JOIN tipos_producto tp ON p.id_tipo = tp.id ORDER BY p.fecha DESC");
 
         if ($result->rowCount() > 0) {
             $productos = $result->fetchAll();
@@ -182,42 +191,70 @@ class ProductosBD {
         $pdo = null;
         return $productos;
     }
-    
-    function getTiposProducto(){
+
+    function getTiposProducto() {
         $pdo = new AccesoBD();
         $pdo = $pdo->abrirConexion();
-        
+
         $result = $pdo->query("SELECT * FROM tipos_producto");
-        
-        if($result->rowCount() > 0){
+
+        if ($result->rowCount() > 0) {
             $tiposProducto = $result->fetchAll();
         }
         $pdo = null;
         return $tiposProducto;
     }
-    
-    function getProductosDeTipo($tipo){
+
+    function getProductosDeTipo($tipo) {
         $pdo = new AccesoBD();
         $pdo = $pdo->abrirConexion();
         $result = $pdo->query("SELECT * FROM productos WHERE id_tipo = $tipo");
-        if($result->rowCount() > 0){
+        if ($result->rowCount() > 0) {
             $productos = $result->fetchAll();
-        } else{
+        } else {
             $productos = null;
         }
         $pdo = null;
         return $productos;
     }
-    
-    function getProductoPorId($id){
+
+    function getProductoPorId($id) {
         $pdo = new AccesoBD();
         $pdo = $pdo->abrirConexion();
         $result = $pdo->query("SELECT * FROM productos WHERE id = $id");
-        if($result->rowCount() > 0){
+        if ($result->rowCount() > 0) {
             $producto = $result->fetch();
         }
         $pdo = null;
         return $producto;
+    }
+    
+    function ajustarInventario($id, $cantidad){
+        $pdo = new AccesoBD();
+        $pdo = $pdo->abrirConexion();
+        $correcto = false;
+        $ajustar = $pdo->prepare("UPDATE productos SET inventario = (inventario - ?) WHERE id = ?");
+        if($ajustar->execute(array($cantidad, $id))){
+            $correcto = true;
+        }
+        $pdo = null;
+        return $correcto;
+    }
+    
+    function ordenarPorPrecio($orden){
+        $pdo = new AccesoBD();
+        $pdo = $pdo->abrirConexion();
+        if($orden == "bajo"){
+            $orden = "ASC";
+        } else if ($orden == "alto"){
+            $orden = "DESC";
+        }
+        $result = $pdo->query("SELECT * FROM productos ORDER BY precio $orden");
+        if($result->rowCount() > 0){
+            $productos = $result->fetchAll();
+        }
+        $pdo = null;
+        return $productos;
     }
 
 }

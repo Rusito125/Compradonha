@@ -40,7 +40,7 @@
             <h3>¿Qué desea realizar?</h3>
             <a href="?action=add">Cargar un producto</a>
             <a href="?action=ver">Ver productos</a>
-            <a href="index.php">Página principal</a>
+            <a href="../index.php">Página principal</a>
             <?php
         }
         ?>

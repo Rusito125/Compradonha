@@ -32,11 +32,16 @@ aside #menu-bar + label{
     flex-direction: column;
 }
 
+#filtro select{
+    align-self: start;
+    margin-top: 1vh;
+    font-size: 0.85em;
+}
 
 section{
     margin-right: 1%;
     width: 80%;
-   /* height: 90vh;*/
+    /* height: 90vh;*/
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -49,14 +54,15 @@ article{
     margin-bottom: 1.5%;
     margin-left: 1%;
     margin-right: 1%;
+    align-self: flex-start;
 }
 
-button{
-    margin-top: 2%;    
+#limpiar{
+    margin-top: 2%;
     width: 80%;
 }
 
-button:hover{
+#limpiar:hover{
     transform: none;
 }
 
@@ -100,14 +106,14 @@ button:hover{
 .producto > a{
     display: flex;
     flex-direction: column;
-    height: 100%;    
+    height: 100%;
     background-color: white;
     justify-content: center;
     align-items: center;
     border-radius: 2em;
 }
 
-@media (max-width: 1000px) and (min-width: 650px){
+@media (max-width: 1000px){
     article{
         grid-template-columns: 1fr 1fr 1fr 1fr;
     }
@@ -158,7 +164,7 @@ button:hover{
         transform: translateX(-100%);
         font-size: 3em;
     }
-    
+
     button{
         width: 50%;
     }

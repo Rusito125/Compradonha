@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <!--
     TODO 
-        falta por añadir las nuevas secciones de la bd
         falta por permitir editar usuario
-        al cerrar sesión se debe guardar el carro para cuando se vuelva a iniciar
         falta por hacer sección de últimas compras
         falta por hacer sección de cupones
         quitar hardcoded javascript
@@ -57,9 +55,10 @@
                             <li>DNI: <b><?= $usuario["DNI"] ?></b></li>
                             <li>Telefono: <b><?= $usuario["telefono"] ?></b></li>
                             <li>Dirección: <b><?= $usuario["calle"] ?> N<?= $usuario["numero"] ?> <?= $usuario["piso"] ?><?= $usuario["puerta"] ?></b></li>
-                            <li>Código postal: </li>
-                            <li>Población: </li>
-                            <li>Provincia: </li>
+                            <li>Código postal: <b><?= $usuario["cp"] ?></b></li>
+                            <li>Población: <b><?= $usuario["poblacion"] ?></b></li>
+                            <li>Provincia: <b><?= $usuario["provincia"] ?></b></li>
+                            <li>Comunidad Autónoma: <b><?= $usuario["comunidad"] ?></b></li>
                             <li>Correo electrónico: <b><?= $usuario["mail"] ?></b></li>
                             <li><a href="#">Editar pefil</a></li>
                         </ul>
@@ -80,8 +79,7 @@
 
         function cerrarSesion() {
             unset($_SESSION["username"]);
-            unset($_SESSION["carro"]);
-            header("Location: http://mercadonha.es/");
+            header("Location: ../../index.php");
         }
         ?>
     </body>

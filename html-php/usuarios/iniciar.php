@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <!-- 
+    falta arreglar sección de contraseña olvidada
     quitar hardcoded javascript
 -->
 <html>
@@ -142,7 +143,7 @@ $_action = isset($_GET["action"]) ? $_GET["action"] : "";
                             <label for="puerta">Puerta: </label>
                             <input type="text" name="puerta" id="puerta" maxlength="1" required <?= isset($_POST["puerta"]) ? "value='" . $_POST["puerta"] . "'" : "" ?>/>
                             <label for="comunidad">Comunidad Autónoma: </label>
-                            <select name="comunidad" onchange="mostrarProvincias(this.value)">
+                            <select name="comunidad" onchange="mostrarProvincias(this.value)" required>
                                 <option selected>Selecciona una Comunidad Autónoma</option>
                                 <?php
                                 $comunidades = $comunidadesBD->getComunidades();
@@ -154,18 +155,18 @@ $_action = isset($_GET["action"]) ? $_GET["action"] : "";
                                 ?>
                             </select>                            
                             <label for="provincia">Provincia: </label>
-                            <select name="provincia" id="provincias">
+                            <select name="provincia" id="provincia" required>
                                 <option selected>Selecciona una Comunidad Autónoma</option>
                             </select>
                             <script>
                                 function mostrarProvincias(codComunidad) {
                                     var xhttp = new XMLHttpRequest();
-                                    xhttp.onreadystatechange = function (){
-                                      if(this.readyState == 4 && this.status == 200){
-                                          document.getElementById("provincias").innerHTML = this.responseText;
-                                      }  
+                                    xhttp.onreadystatechange = function () {
+                                        if (this.readyState == 4 && this.status == 200) {
+                                            document.getElementById("provincia").innerHTML = this.responseText;
+                                        }
                                     };
-                                    xhttp.open("GET", "../archivosBD/ComunidadesBD.php?codComunidad="+codComunidad, true);
+                                    xhttp.open("GET", "../archivosBD/ComunidadesBD.php?codComunidad=" + codComunidad, true);
                                     xhttp.send();
                                 }
                             </script>
@@ -199,6 +200,7 @@ $_action = isset($_GET["action"]) ? $_GET["action"] : "";
                     let telefono = document.getElementById("telefono");
                     let passw = document.getElementById("passw");
                     let passw2 = document.getElementById("passw2");
+                    let cp = document.getElementById("cp");
 
                     // event listeners
                     nombre.addEventListener("change", e => {
@@ -241,7 +243,7 @@ $_action = isset($_GET["action"]) ? $_GET["action"] : "";
                         }
                     });
 
-                    passw.addEventListener("change", e => {
+                    passw.addEventListener("input", e => {
                         let aviso = getAviso(e.target);
                         if (!/^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{6,20}$/.test(e.target.value)) {
                             aviso.innerText = "Contraseña no válida";
@@ -252,7 +254,7 @@ $_action = isset($_GET["action"]) ? $_GET["action"] : "";
                         eventoPassw2();
                     });
 
-                    passw2.addEventListener("change", eventoPassw2);
+                    passw2.addEventListener("input", eventoPassw2);
                     function passCoinciden() {
                         let coinciden = true;
                         if (passw.value != passw2.value) {
@@ -260,6 +262,16 @@ $_action = isset($_GET["action"]) ? $_GET["action"] : "";
                         }
                         return coinciden;
                     }
+                    
+                    cp.addEventListener("change", e=>{
+                        let aviso = getAviso(e.target);
+                        if(!/^[0-9]{5}$/.test(e.target.value)){
+                            aviso.innerText = "Código postal no válido";
+                            e.target.insertAdjacentElement('afterend', aviso);
+                        } else{
+                            aviso.remove();
+                        }
+                    });
 
                     // funciones
                     function eventoPassw2() {
@@ -336,7 +348,7 @@ $_action = isset($_GET["action"]) ? $_GET["action"] : "";
                         }
                     }
                     if (!$usernameUsado) {
-                        if ($usuariosBD->setUsuario($_POST["nombre"], $_POST["apellidos"], $_POST["DNI"], $_POST["telefono"], $_POST["calle"], $_POST["numero"], $_POST["piso"], $_POST["puerta"], $_POST["mail"], $_POST["username"], $_POST["passw"])) {
+                        if ($usuariosBD->setUsuario($_POST["nombre"], $_POST["apellidos"], $_POST["DNI"], $_POST["telefono"], $_POST["calle"], $_POST["numero"], $_POST["piso"], $_POST["puerta"], $_POST["comunidad"], $_POST["provincia"], $_POST["poblacion"], $_POST["cp"], $_POST["mail"], $_POST["username"], $_POST["passw"])) {
                             $_SESSION["username"] = $_POST["username"];
                             ?>
                             <script>
@@ -349,13 +361,13 @@ $_action = isset($_GET["action"]) ? $_GET["action"] : "";
                         <script>
                             alert("EL NOMBRE DE USUARIO YA ESTÁ EN USO");
                         </script>
-            <?php
-        }
-    }
-}
+                        <?php
+                    }
+                }
+            }
 
-function reestablecerContra() {
-    ?>
+            function reestablecerContra() {
+                ?>
                 <section class="inicio">
                     <h2>Recordar contraseña</h2>
                     <form method="post" action="?action=correoEnviado">
@@ -385,10 +397,10 @@ function reestablecerContra() {
                                 $mail->Host = 'smtp.ionos.es';
                                 $mail->Port = 587;
                                 $mail->SMTPAuth = true;
-                                $mail->Username = 'contacto@mercadonha.es';
-                                $mail->Password = 'JPsiempre123';
+                                $mail->Username = 'contacto@compradonha.es';
+                                $mail->Password = '';
 
-                                $mail->setFrom('contacto@mercadonha.es', 'Recordatorio password');
+                                $mail->setFrom('contacto@compradonha.es', 'Recordatorio password');
                                 $mail->addAddress($usuario["mail"], $usuario["nombre"]);
 
                                 $mail->isHTML(true);
@@ -396,10 +408,10 @@ function reestablecerContra() {
                                 $mail->Body = "Hola " . $usuario["nombre"] . " " . $usuario["apellidos"] . ".<br/>"
                                         . "Este correo ha sido generado automáticamente porque has olvidado la contraseña.<br/>"
                                         . "Si usted es " . $usuario["nombre"] . " haga click en el siguiente enlace para crear una nueva contraseña:<br/>"
-                                        . "<a href='http://mercadonha.es/usuarios/iniciar?action=enlaceRecup'>Crear nueva contraseña</a><br/>"
+                                        . "<a href='http://compradonha.store/usuarios/iniciar?action=enlaceRecup'>Crear nueva contraseña</a><br/>"
                                         . "Si usted no es " . $usuario["nombre"] . " ignore este correo y bórrelo.<br/>"
                                         . "Gracias por confiar en nosotros.<br/>"
-                                        . "Mercadonha";
+                                        . "Compradoña";
                                 $mail->CharSet = 'UTF-8';
 
                                 $mail->send();
@@ -433,12 +445,12 @@ function reestablecerContra() {
                         alert("Usuario o correo electrónico no registrados");
                         location.href = "?action=olvida";
                     </script>
-        <?php
-    }
-}
+                    <?php
+                }
+            }
 
-function crearContra() {
-    ?>
+            function crearContra() {
+                ?>
                 <section class="inicio">
                     <h2>Reestablecer</h2>
                     <form method="post" onsubmit="return validar()">
@@ -521,17 +533,17 @@ function crearContra() {
                                 alert("La contraseña ha sido cambiada correctamente");
                                 location.href = "?action=iniciar";
                             </script>
-                        <?php
+                            <?php
+                        }
+                    } else {
+                        echo "No existe el usuario";
                     }
-                } else {
-                    echo "No existe el usuario";
                 }
             }
-        }
-        ?>
+            ?>
         </main>
-<?php
-$cabeceraFooter->footer();
-?>
+        <?php
+        $cabeceraFooter->footer();
+        ?>
     </body>
 </html>

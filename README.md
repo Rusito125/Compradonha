@@ -1,2 +1,2 @@
-# Compradonha
+# Compradoña
  Proyecto fin de ciclo
