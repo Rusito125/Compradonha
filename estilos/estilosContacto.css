@@ -1,0 +1,70 @@
+body{
+    align-items: center;
+}
+
+main{
+    display: flex;
+    flex-direction: row;
+    height: 90vh;
+    width: 98%;
+    gap: 1vh;
+}
+
+section{
+    background-color: var(--primary-color);
+    border-radius: 3em;
+    height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#redes{
+    width: 30%;
+}
+
+#formulario{
+    width: 70%;
+}
+
+form, fieldset{
+    display: flex;
+    flex-direction: column;
+}
+
+form{
+    width: 80%;
+}
+
+fieldset{
+    padding: 5vh;
+    border-radius: 3em;
+    width: 100%;
+}
+
+button:hover{
+    transform: scale(1.05);
+}
+
+#redes p{
+    font-size: 2vw;
+}
+
+@media (max-width: 850px){
+    main{
+        flex-direction: column;
+    }
+    
+    #redes, #formulario{
+        width: 100%;
+    }
+    
+    section h2{
+        font-size: 2.5vh;
+    }
+    
+    #redes p{
+        font-size: 2vh;
+    }
+}

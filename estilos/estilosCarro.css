@@ -7,11 +7,12 @@
 }
 
 #carroGordo .productoCarro img{
-    height: 40vh;
+    width: 40%;
+    max-height: 60%;
 }
 
 #carroGordo .productoCarro div{
-    font-size: 1.25em;
+    font-size: 1.8vh;
     text-align: center;
 }
 
@@ -21,10 +22,4 @@
 
 #carroGordo .productoCarro div h4 a{
     margin-left: 1vw;
-}
-
-@media (max-device-width: 650px){
-    #carroGordo .productoCarro img{
-        height: 40vw;
-    }
 }

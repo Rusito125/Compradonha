@@ -65,10 +65,10 @@ img{
     width: 100%;
 }
 
-@media (max-device-width: 650px){
+@media (max-width: 650px){
 
     img{
-        height: 50vw;
+        height: 90vw;
         max-width: 90%;
         max-height: 90%;
     }
@@ -90,7 +90,11 @@ img{
         justify-content: start;
         width: 98%;
         align-items: center;
-        font-size: 2em;
+        font-size: 1.8vh;
+    }
+    
+    #info form{
+        align-items: center;
     }
 
 }

@@ -31,15 +31,28 @@
     gap: 2%;
 }
 
+#registro{
+    padding: 1vh;
+}
+
 #registro, #novedades{
     width: 50%;
     height: auto;
 }
 
+#novedades{
+    padding-top: 1.5vh;
+}
+
 #registro div{
     width: 100%;
     text-align: center;
-    margin-bottom: 1%;
+    margin-bottom: 1%;    
+}
+
+div.runner-container{
+    background-color: white;
+    border-radius: 2em;
 }
 
 #registro button{
@@ -51,7 +64,6 @@
     grid-template-columns: 1fr 1fr;
     margin-left: 4%;
     margin-right: 4%;
-    height: 75%;
     margin-bottom: 6vh;
     justify-items: center;
 }
@@ -68,7 +80,7 @@
 }
 
 #imgNov div img{
-    max-width: 100%;
+    width: 100%;
     max-height: 100%;
 }
 
@@ -82,7 +94,7 @@
     position: absolute;
     color: black;
     font-weight: bold;
-    font-size: 2em;
+    font-size: 1.8vw;
 }
 
 #imgNov div a:hover{
@@ -90,19 +102,17 @@
     background-color: var(--primary-color);
 }
 
-@media (max-device-width: 850px){
+@media (max-width: 850px){
     #imgNov{
         grid-template-columns: 1fr;
     }
-
+    
     #imgNov div a{
-        font-size: 1.2em;
+        font-size: 1.5vh;
     }
-}
-
-@media (min-width: 850px) and (max-width: 1200px) {
-    #imgNov div a{
-        font-size: 1.39em;
+    
+    #registro button{
+        width: 100%;
     }
 }
 

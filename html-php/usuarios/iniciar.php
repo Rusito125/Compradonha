@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <!-- 
-    falta arreglar sección de contraseña olvidada
-    quitar hardcoded javascript
+    TODO
+        falta arreglar sección de contraseña olvidada
+        quitar hardcoded javascript
 -->
 <html>
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="https://kit.fontawesome.com/3b88ef1ad2.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" type="text/css" href="../../estilos/normalize.css"/>
         <link rel="stylesheet" type="text/css" href="../../estilos/estilos.css"/>
@@ -24,19 +26,19 @@
 $_action = isset($_GET["action"]) ? $_GET["action"] : "";
         switch ($_action) {
             case "iniciar":
-                echo "<title>Inicio de sesión</title>";
+                echo "<title>Inicio de sesión - Compradoña</title>";
                 break;
             case "registro":
-                echo "<title>Registrarse</title>";
+                echo "<title>Registrarse - Compradoña</title>";
                 break;
             case "olvida":
-                echo "<title>Reestablecer contraseña</title>";
+                echo "<title>Reestablecer contraseña - Compradoña</title>";
                 break;
             case "correoEnviado":
-                echo "<title>Correo enviado</title>";
+                echo "<title>Correo enviado - Compradoña</title>";
                 break;
             case "enlaceRecup":
-                echo "<title>Crear contraseña</title>";
+                echo "<title>Crear contraseña - Compradoña</title>";
                 break;
         }
         require_once '../archivosBD/UsuariosBD.php';
@@ -90,17 +92,27 @@ $_action = isset($_GET["action"]) ? $_GET["action"] : "";
                 <?php
                 if (isset($_POST["username"]) && isset($_POST["passw"])) {
                     $usuariosBD = new UsuariosBD();
-                    if ($usuariosBD->comprobarPasswd($_POST["username"], $_POST["passw"])) {
-                        $_SESSION["username"] = $_POST["username"];
-                        ?>
-                        <script>
-                            location.href = "perfil.php";
-                        </script>
-                        <?php
+                    $sesion = $usuariosBD->getSesion($_POST["username"]);
+                    if ($sesion["verificado"]) {
+                        if ($usuariosBD->comprobarPasswd($_POST["username"], hash("sha256", $_POST["passw"]))) {
+                            $_SESSION["username"] = $_POST["username"];
+                            ?>
+                            <script>
+                                location.href = "perfil.php";
+                            </script>
+                            <?php
+                        } else {
+                            ?>
+                            <script>
+                                alert("Usuario o contraseña incorrectos");
+                            </script>
+                            <?php
+                        }
                     } else {
                         ?>
                         <script>
-                            alert("Usuario o contraseña incorrectos");
+                            alert("Usuario no verificado");
+                            location.href = "verifica.php?action=crear&user=<?= $_POST["username"] ?>";
                         </script>
                         <?php
                     }
@@ -262,13 +274,13 @@ $_action = isset($_GET["action"]) ? $_GET["action"] : "";
                         }
                         return coinciden;
                     }
-                    
-                    cp.addEventListener("change", e=>{
+
+                    cp.addEventListener("change", e => {
                         let aviso = getAviso(e.target);
-                        if(!/^[0-9]{5}$/.test(e.target.value)){
+                        if (!/^[0-9]{5}$/.test(e.target.value)) {
                             aviso.innerText = "Código postal no válido";
                             e.target.insertAdjacentElement('afterend', aviso);
-                        } else{
+                        } else {
                             aviso.remove();
                         }
                     });
@@ -338,6 +350,7 @@ $_action = isset($_GET["action"]) ? $_GET["action"] : "";
                 <?php
                 if (isset($_POST['captcha_challenge']) && $_POST['captcha_challenge'] == $_SESSION['captcha_text']) {
                     $usernameUsado = false;
+                    $correoUsado = false;
                     $usuariosBD = new UsuariosBD();
                     $listaUsernames = $usuariosBD->getUsernames();
                     if ($listaUsernames != null) {
@@ -347,12 +360,27 @@ $_action = isset($_GET["action"]) ? $_GET["action"] : "";
                             }
                         }
                     }
+                    $listaUsuarios = $usuariosBD->getUsuarios();
+                    if ($listaUsuarios != null) {
+                        foreach ($listaUsuarios as $usuario) {
+                            if ($_POST["mail"] == $usuario["mail"]) {
+                                $correoUsado = true;
+                            }
+                        }
+                    }
                     if (!$usernameUsado) {
-                        if ($usuariosBD->setUsuario($_POST["nombre"], $_POST["apellidos"], $_POST["DNI"], $_POST["telefono"], $_POST["calle"], $_POST["numero"], $_POST["piso"], $_POST["puerta"], $_POST["comunidad"], $_POST["provincia"], $_POST["poblacion"], $_POST["cp"], $_POST["mail"], $_POST["username"], $_POST["passw"])) {
-                            $_SESSION["username"] = $_POST["username"];
+                        if (!$correoUsado) {
+                            if ($usuariosBD->setUsuario($_POST["nombre"], $_POST["apellidos"], $_POST["DNI"], $_POST["telefono"], $_POST["calle"], $_POST["numero"], $_POST["piso"], $_POST["puerta"], $_POST["comunidad"], $_POST["provincia"], $_POST["poblacion"], $_POST["cp"], $_POST["mail"], $_POST["username"], hash("sha256", $_POST["passw"]))) {
+                                ?>
+                                <script>
+                                    location.href = "verifica.php?action=crear&user=<?= $_POST["username"] ?>";
+                                </script>
+                                <?php
+                            }
+                        } else {
                             ?>
                             <script>
-                                location.href = "perfil.php";
+                                alert("EL CORREO ELECTRÓNICO INDICADO YA ESTÁ REGISTRADO");
                             </script>
                             <?php
                         }
@@ -397,10 +425,10 @@ $_action = isset($_GET["action"]) ? $_GET["action"] : "";
                                 $mail->Host = 'smtp.ionos.es';
                                 $mail->Port = 587;
                                 $mail->SMTPAuth = true;
-                                $mail->Username = 'contacto@compradonha.es';
-                                $mail->Password = '';
+                                $mail->Username = 'contacto@mercadonha.es';
+                                $mail->Password = 'CompradonhaContacto123.';
 
-                                $mail->setFrom('contacto@compradonha.es', 'Recordatorio password');
+                                $mail->setFrom('contacto@mercadonha.es', 'Recordatorio password');
                                 $mail->addAddress($usuario["mail"], $usuario["nombre"]);
 
                                 $mail->isHTML(true);
@@ -408,7 +436,7 @@ $_action = isset($_GET["action"]) ? $_GET["action"] : "";
                                 $mail->Body = "Hola " . $usuario["nombre"] . " " . $usuario["apellidos"] . ".<br/>"
                                         . "Este correo ha sido generado automáticamente porque has olvidado la contraseña.<br/>"
                                         . "Si usted es " . $usuario["nombre"] . " haga click en el siguiente enlace para crear una nueva contraseña:<br/>"
-                                        . "<a href='http://compradonha.store/usuarios/iniciar?action=enlaceRecup'>Crear nueva contraseña</a><br/>"
+                                        . "<a href='http://mercadonha.es/html-php/usuarios/iniciar?action=enlaceRecup&cod=" . hash("sha256", $_POST["username"]) . "'>Crear nueva contraseña</a><br/>"
                                         . "Si usted no es " . $usuario["nombre"] . " ignore este correo y bórrelo.<br/>"
                                         . "Gracias por confiar en nosotros.<br/>"
                                         . "Compradoña";
@@ -470,7 +498,7 @@ $_action = isset($_GET["action"]) ? $_GET["action"] : "";
                     let passw = document.getElementById("passw");
                     let passw2 = document.getElementById("passw2");
 
-                    passw.addEventListener("change", e => {
+                    passw.addEventListener("input", e => {
                         let aviso = getAviso(e.target);
                         if (!/^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{6,20}$/.test(e.target.value)) {
                             aviso.innerText = "Contraseña no válida";
@@ -481,7 +509,7 @@ $_action = isset($_GET["action"]) ? $_GET["action"] : "";
                         eventoPassw2();
                     });
 
-                    passw2.addEventListener("change", eventoPassw2);
+                    passw2.addEventListener("input", eventoPassw2);
                     function passCoinciden() {
                         let coinciden = true;
                         if (passw.value != passw2.value) {
@@ -526,17 +554,26 @@ $_action = isset($_GET["action"]) ? $_GET["action"] : "";
                 <?php
                 if (isset($_POST["username"]) && isset($_POST["passw"])) {
                     $usuariosBD = new UsuariosBD();
-                    if ($usuariosBD->existeUsuario($_POST["username"])) {
-                        if ($usuariosBD->reestablecerContra($_POST["username"], $_POST["passw"])) {
-                            ?>
-                            <script>
-                                alert("La contraseña ha sido cambiada correctamente");
-                                location.href = "?action=iniciar";
-                            </script>
-                            <?php
+                    $sesion = $usuariosBD->getUserByCod($_GET["cod"]);
+                    if ($sesion != null) {
+                        if ($usuariosBD->existeUsuario($_POST["username"])) {
+                            if ($usuariosBD->reestablecerContra($_POST["username"], hash("sha256", $_POST["passw"]))) {
+                                ?>
+                                <script>
+                                    alert("La contraseña ha sido cambiada correctamente");
+                                    location.href = "?action=iniciar";
+                                </script>
+                                <?php
+                            }
+                        } else {
+                            echo "No existe el usuario";
                         }
                     } else {
-                        echo "No existe el usuario";
+                        ?>
+                        <script>
+                            alert("Error en el código");
+                        </script>
+                        <?php
                     }
                 }
             }

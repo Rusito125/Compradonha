@@ -1,0 +1,51 @@
+main{
+    width: 100%;
+}
+
+section{
+    width: 98%;
+    background-color: var(--primary-color);
+    border-radius: 3em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 2vh;
+}
+
+#productos{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 2vh;
+    align-items: center;
+}
+
+.producto{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 3vh;
+    height: 20vh;
+    width: 100%;
+}
+
+.imagen, .datos{
+    width: 50%;
+}
+
+.producto .imagen{    
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.producto img{
+    max-width: 100%;
+    cursor: pointer;
+}
+
+.producto .datos{
+    display: flex;
+    flex-direction: column;
+}

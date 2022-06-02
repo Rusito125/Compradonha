@@ -51,6 +51,8 @@ id_usuario int,
 username varchar(20) NOT NULL,     
 passwd varchar(64) NOT NULL,     
 fecha datetime NOT NULL,
+verificado bool NOT NULL,
+codVerifica varchar(64),
 foreign key (id_usuario) references Usuarios(id) on delete cascade 
 ) engine = InnoDB;
 
@@ -74,7 +76,8 @@ foreign key (id_tipo) references Tipos_Producto(id) on delete restrict,
 constraint CK_Inventario_Positivos CHECK (inventario >= 0)
 ) engine = InnoDB;
 
-CREATE TABLE Usuario_Producto(  
+CREATE TABLE Compras(  
+id int NOT NULL,
 id_usuario int NOT NULL,     
 id_producto int NOT NULL,      
 fecha datetime NOT NULL,
@@ -83,22 +86,22 @@ foreign key (id_usuario) references Usuarios(id) on delete cascade,
 foreign key (id_producto) references Productos(id) on delete cascade 
 ) engine = InnoDB;
 
-CREATE TABLE Cupones(  
+/*CREATE TABLE Cupones(  
 id int NOT NULL,     
 nombre varchar(30) NOT NULL,     
-/* El descuento es un porcentaje */     
+ El descuento es un porcentaje   
 descuento double NOT NULL,     
 tipo_producto int NOT NULL,     
 primary key Cupones(id) 
-) engine = InnoDB;
+) engine = InnoDB;*/
 
-CREATE TABLE Usuario_Cupon(  
+/*CREATE TABLE Usuario_Cupon(  
 id_usuario int NOT NULL,     
 id_cupon int NOT NULL,     
 cantidad int NOT NULL,  
 foreign key (id_usuario) references Usuarios(id) on delete cascade,     
 foreign key (id_cupon) references Cupones(id) on delete cascade 
-) engine = InnoDB;
+) engine = InnoDB;*/
 
 CREATE TABLE Carro(
 id_usuario int NOT NULL,
@@ -128,7 +131,7 @@ INSERT INTO Tipos_Producto values
 (12, "Yogures"),
 (13, "Salsas");
 
-INSERT INTO Cupones values
+/*INSERT INTO Cupones values
 (1, "Descuento en Alcohol", 20, 1),
 (2, "Descuento en Carne", 10, 2),
 (3, "Descuento en Fruta", 15, 3),
@@ -138,7 +141,7 @@ INSERT INTO Cupones values
 (7, "Descuento en Móviles", 30, 7),
 (8, "Descuento en Papel higiénico", 90, 8),
 (9, "Descuento en Pescado", 20, 9),
-(10, "Descuento en Verduras", 13, 10);
+(10, "Descuento en Verduras", 13, 10);*/
 
 INSERT INTO Comunidades(codComunidad, nombre)
 VALUES

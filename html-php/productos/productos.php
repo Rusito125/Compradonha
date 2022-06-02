@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <!-- 
     quitar hardcoded javascript
+    cambiar color de fondo de filtro de móvil en modo claro
+    cambiar filtro a ajax
 -->
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Productos</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Productos - Compradoña</title>
         <script src="https://kit.fontawesome.com/3b88ef1ad2.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" type="text/css" href="../../estilos/normalize.css"/>
         <link rel="stylesheet" type="text/css" href="../../estilos/estilos.css"/>
         <link rel="stylesheet" type="text/css" href="../../estilos/estilosProductos.css"/>
         <link rel="icon" href="../../img/varios/favicon.png"/>
     </head>
-    <body>
+    <body>              
         <?php
         session_start();
         require_once '../archivosBD/ProductosBD.php';
@@ -30,15 +33,13 @@
                     <h2>Filtrar</h2>
                     <div>
                         <?php
+                        $marcados = null;
                         if (!isset($_POST["limpiar"])) {
                             foreach ($_POST as $key => $value) {
                                 if (substr($key, 0, 4) == "tipo") {
                                     $marcados[] = $value;
                                 }
                             }
-                        }
-                        if (!isset($marcados)) {
-                            $marcados = null;
                         }
                         $orden = null;
                         if (!isset($_POST["limpiar"])) {
@@ -49,7 +50,7 @@
                                 }
                             }
                         }
-                        
+
                         $hayMarcado = false;
 
                         $tiposProducto = $productosBD->getTiposProducto();
@@ -58,12 +59,12 @@
                             ?>
                             <div><input type='checkbox' value="<?= $tipo["id"] ?>" name='tipo<?= $tipo["id"] ?>' id='tipo<?= $tipo["id"] ?>' onchange='cambiaTipo()' <?= $marcados != null ? (in_array($tipo["id"], $marcados) ? "checked" : "") : "" ?>/> <label for='tipo<?= $tipo["id"] ?>'><?= $tipo["tipo"] ?></label></div>
                         <?php } ?>
-                        <button id='limpiar' name='limpiar'>Limpiar Filtros</button>
                         <select name="filtroPrecio" onchange="cambiaTipo()">
                             <option value="" <?= $orden == null ? "selected" : "" ?>>Orden normal</option>
                             <option value="bajo" <?= $orden == "bajo" ? "selected" : "" ?>>Precio más bajo</option>
                             <option value="alto" <?= $orden == "alto" ? "selected" : "" ?>>Precio más alto</option>
                         </select>
+                        <button id='limpiar' name='limpiar'>Limpiar Filtros</button>                        
                         </form>
                     </div>
                     <script>
@@ -81,7 +82,7 @@
                     <?php
                     if (isset($_GET["cuadroBusqueda"])) {
                         if ($orden != null) {
-                            $productos = $productosBD->ordenarPorPrecio($orden);
+                            $productos = $productosBD->getProductosOrdenPrecio($orden);
                         } else {
                             $productos = $productosBD->getProductos();
                         }
@@ -92,22 +93,12 @@
                                     foreach ($marcados as $marcado) {
                                         if ($producto["id_tipo"] == $marcado) {
                                             $hayProductos = true;
-                                            ?>
-                                            <div class="producto">
-                                                <a href="producto?id=<?= $producto["id"] ?>"><img src="data:image/jpg;base64,<?= base64_encode($producto["imagen"]) ?>"/></a>
-                                                <div><a href="producto?id=<?= $producto["id"] ?>"><h3><?= $producto["nombre"] ?></h3></a><a href="producto?id=<?= $producto["id"] ?>"><h4><?= $producto["precio"] ?>€</h4></a></div>
-                                            </div>
-                                            <?php
+                                            mostrarProducto($producto);
                                         }
                                     }
                                 } else {
                                     $hayProductos = true;
-                                    ?>
-                                    <div class="producto">
-                                        <a href="producto?id=<?= $producto["id"] ?>"><img src="data:image/jpg;base64,<?= base64_encode($producto["imagen"]) ?>"/></a>
-                                        <div><a href="producto?id=<?= $producto["id"] ?>"><h3><?= $producto["nombre"] ?></h3></a><a href="producto?id=<?= $producto["id"] ?>"><h4><?= $producto["precio"] ?>€</h4></a></div>
-                                    </div>
-                                    <?php
+                                    mostrarProducto($producto);
                                 }
                             }
                         }
@@ -116,7 +107,7 @@
                         }
                     } else if ($marcados != null && $marcados[0] != "") {
                         if ($orden != null) {
-                            $productos = $productosBD->ordenarPorPrecio($orden);
+                            $productos = $productosBD->getProductosOrdenPrecio($orden);
                         } else {
                             $productos = $productosBD->getProductos();
                         }
@@ -133,7 +124,7 @@
                         }
                     } else {
                         if ($orden != null) {
-                            $productos = $productosBD->ordenarPorPrecio($orden);
+                            $productos = $productosBD->getProductosOrdenPrecio($orden);
                         } else {
                             $productos = $productosBD->getProductos();
                         }
@@ -156,6 +147,6 @@
         </main>
         <?php
         $cabeceraFooter->footer();
-        ?>
+        ?>              
     </body>
 </html>

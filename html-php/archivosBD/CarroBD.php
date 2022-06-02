@@ -28,7 +28,7 @@ class CarroBD {
     function getProductoCarro($idUsuario, $idProducto) {
         $pdo = new AccesoBD;
         $pdo = $pdo->abrirConexion();
-        $resultado = $pdo->query("SELECT * FROM carro WHERE id_usuario = $idUsuario AND id_producto = $idProducto");
+        $resultado = $pdo->query("SELECT c.cantidad,p.* FROM carro c JOIN productos p ON p.id=c.id_producto WHERE id_usuario = $idUsuario AND id_producto = $idProducto");
         if ($resultado->rowCount() > 0) {
             $productoCarro = $resultado->fetch();
         } else {
@@ -57,6 +57,18 @@ class CarroBD {
         $correcto = false;
         $borrar = $pdo->prepare("DELETE FROM carro WHERE id_usuario = ? AND id_producto = ?");
         if ($borrar->execute(array($idUsuario, $idProducto))) {
+            $correcto = true;
+        }
+        $pdo = null;
+        return $correcto;
+    }
+    
+    function vaciarCarro($idUsuario){
+        $pdo = new AccesoBD();
+        $pdo = $pdo->abrirConexion();
+        $correcto = false;
+        $borrar = $pdo->prepare("DELETE FROM carro WHERE id_usuario = ?");
+        if ($borrar->execute(array($idUsuario))) {
             $correcto = true;
         }
         $pdo = null;

@@ -1,5 +1,5 @@
 .inicio{
-    height: 88vh;
+    height: 90vh;
 }
 
 .inicio div{
@@ -15,7 +15,6 @@ section{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-size: 1.5em;
     padding-bottom: 2vh;
 }
 
@@ -27,6 +26,7 @@ form{
 }
 
 fieldset{
+    border-radius: 1em;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 3vh;
@@ -47,14 +47,14 @@ label{
     font-size: 0.8em;
 }
 
-input, select{
+input, select{    
     grid-column: 2 / 4;
     width: 80%;
     justify-self: start;
 }
 
 select{
-    font-size: 75%;
+    font-size: 95%;
 }
 
 button{
@@ -72,7 +72,7 @@ div{
     align-items: center;
 }
 
-@media (max-device-width: 650px){
+@media (max-width: 650px){
     fieldset{
         display: flex;
         flex-direction: column;

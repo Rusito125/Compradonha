@@ -1,0 +1,19 @@
+section{
+    background-color: var(--primary-color);
+    border-radius: 2em;
+    width: 90%;
+}
+
+section{
+    padding: 2vw;
+}
+
+section, section div, #importantes{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+div img{
+    height: 30vw;
+}

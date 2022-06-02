@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <!--
     TODO
-        quitar hardcoded javascript
-        vaciar inventario solo cuando se haga la compra y no cuando se añada al carro (o dejar así como si al añadir a la cesta fueran reservados)
+        quitar hardcoded javascript        
 -->
 <html>
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <?php
         session_start();
         require_once '../archivosBD/ProductosBD.php';
@@ -17,7 +17,7 @@
         $productosBD = new ProductosBD();
         $producto = $productosBD->getProductoPorId($_GET["id"]);
         ?>
-        <title><?= $producto["nombre"] ?></title>
+        <title><?= $producto["nombre"] ?> - Compradoña</title>
         <script src="https://kit.fontawesome.com/3b88ef1ad2.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" type="text/css" href="../../estilos/normalize.css"/>
         <link rel="stylesheet" type="text/css" href="../../estilos/estilos.css"/>
@@ -45,12 +45,13 @@
                 <div id="info">
                     <h1><?= $producto["nombre"] ?></h1>
                     <h3><?= $producto["precio"] ?>€</h3>
-                    <?= $producto["descripcion"] != null ? "<p>" . $producto["descripcion"] . "</p>" : "" ?>
+                    <?= $producto["descripcion"] != null ? "<p>" . $producto["descripcion"] . "</p>" : "" ?>                   
                     <?php
                     if ($productoCarro == null && $producto["inventario"] == 0 || $productoCarro != null && ($producto["inventario"] + $productoCarro["cantidad"]) == 0) {
                         echo "<h2 style='color:red'>Producto agotado</h2>";
                     } else {
                         ?>
+                        <h3>Cantidad en stock: <?= $producto["inventario"] + (($productoCarro != null) ? $productoCarro["cantidad"] : 0) ?></h3>
                         <form method="post">
                             <input type="number" name="cantidad" min="1" max="<?= $producto["inventario"] > 10 ? 10 : $producto["inventario"] + (($productoCarro != null) ? $productoCarro["cantidad"] : 0) ?>" value="<?= $value ?>"/>
                             <button name="<?= $producto["id"] ?>">Añadir a la cesta</button>                        

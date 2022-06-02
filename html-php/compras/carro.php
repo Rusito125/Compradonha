@@ -1,9 +1,3 @@
-<!DOCTYPE html>
-<!-- 
-    TODO
-        falta dar función al botón de pasar a caja
-        falta arreglar altura de imágenes desde el móvil
--->   
 <?php
 session_start();
 require_once '../archivosBD/ProductosBD.php';
@@ -28,7 +22,7 @@ function mostrarCarro($carroBD, $idUsuario) {
                 <img src="data:image/jpg;base64,<?= base64_encode($productoCarro['imagen']) ?>" onclick="verProducto(<?= $productoCarro["id"] ?>)">
                 <script>
                     function verProducto(idProducto) {
-                    location.href = "<?= $GLOBALS["url"] ?>productos/producto.php?id=" + idProducto;
+                        location.href = "<?= $GLOBALS["url"] ?>productos/producto.php?id=" + idProducto;
                     }
                 </script>
             </div>
@@ -36,7 +30,7 @@ function mostrarCarro($carroBD, $idUsuario) {
         }
         ?>
         <h3>Precio total: <?= $precioTotal ?>€</h3>
-        <button class='caja' onclick="location.href = '<?= $GLOBALS["url"] ?>usuarios/carro.php'">Pasar a caja</button>
+        <button class='caja' onclick="location.href = '<?= $GLOBALS["url"] ?>compras/compra.php'">Pasar a caja</button>
         <?php
     } else {
         ?>
@@ -57,9 +51,9 @@ if (isset($_GET["id"]) && isset($_GET["action"]) && $_GET["action"] == "borrar")
     $cantidad = $carroBD->getProductoCarro($usuario["id"], $_GET["id"])["cantidad"];
     if ($carroBD->borrarProductoCarro($usuario["id"], $_GET["id"])) {
         if ($productosBD->ajustarInventario($_GET["id"], -$cantidad)) {
-            if($carroBD->borrarEvento($_GET["id"], $usuario["id"])){
-                 mostrarCarro($carroBD, $usuario["id"]);
-            }           
+            if ($carroBD->borrarEvento($_GET["id"], $usuario["id"])) {
+                mostrarCarro($carroBD, $usuario["id"]);
+            }
         } else {
             echo "<h2>Error al actualizar el inventario</h2>";
         }
@@ -68,10 +62,16 @@ if (isset($_GET["id"]) && isset($_GET["action"]) && $_GET["action"] == "borrar")
     }
 } else {
     ?>
+    <!DOCTYPE html>
+    <!-- 
+        TODO
+            funciones y diseño acabados        
+    --> 
     <html>
         <head>
             <meta charset="UTF-8">
-            <title>Carro</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Carro - Compradoña</title>
             <script src="https://kit.fontawesome.com/3b88ef1ad2.js" crossorigin="anonymous"></script>
             <link rel="stylesheet" type="text/css" href="../../estilos/normalize.css"/>
             <link rel="stylesheet" type="text/css" href="../../estilos/estilos.css"/>
@@ -102,14 +102,14 @@ if (isset($_GET["id"]) && isset($_GET["action"]) && $_GET["action"] == "borrar")
             </main>
             <script>
                 function borrarCarroProducto(idProducto) {
-                var xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("carroGordo").innerHTML = this.responseText;
-                }
-                };
-                xhttp.open("GET", "<?= $url ?>usuarios/carro.php?action=borrar&id=" + idProducto, true);
-                xhttp.send();
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            document.getElementById("carroGordo").innerHTML = this.responseText;
+                        }
+                    };
+                    xhttp.open("GET", "<?= $url ?>compras/carro.php?action=borrar&id=" + idProducto, true);
+                    xhttp.send();
                 }
             </script>
             <?php

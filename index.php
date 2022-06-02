@@ -2,14 +2,13 @@
 <!-- 
      TODO:          
           falta editar el section registro para mostrar datos del usuario cuando éste esté conectado
-          falta contacto
-          falta quienes somos
           opcional cambiar algunos diseños a bootstrap
           quitar hardcoded javascript
 -->
 <html>
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Compradoña</title>
         <script src="https://kit.fontawesome.com/3b88ef1ad2.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" type="text/css" href="estilos/normalize.css"/>
@@ -22,6 +21,7 @@
         session_start();
         require_once 'html-php/archivosBD/ProductosBD.php';
         require_once 'html-php/cabeceraFooter.php';
+        require_once './html-php/juego/juegoDino.php';
         $cabeceraFooter = new CabeceraFooter();
         $cabeceraFooter->cabecera();
         $productosBD = new ProductosBD();
@@ -38,10 +38,12 @@
                         require_once 'html-php/archivosBD/UsuariosBD.php';
                         $usuariosBD = new UsuariosBD();
                         $usuario = $usuariosBD->getUsuarioByUsername($_SESSION["username"]);
+                        $juegos = new Juegos;
                         ?>
                         <h2>Bienvenido <?= $usuario["nombre"] ?></h2>
-                        <button onclick="location.href = 'html-php/usuarios/perfil'">Mi perfil</button>
+                        <button onclick="location.href = 'html-php/usuarios/perfil'">Mi perfil</button>    
                         <?php
+                        // $juegos->juegoDino();
                     } else {
                         ?>
                         <div>
@@ -56,10 +58,13 @@
                     <div id="imgNov">
                         <?php
                         $productos = $productosBD->getProductos();
-                        for ($i = 0; $i < 4; $i++) {
-                            ?>
-                            <div><a href="html-php/productos/producto?id=<?= $productos[$i]["id"] ?>"><?= $productos[$i]["nombre"] ?></a><img src="data:image/jpg;base64,<?= base64_encode($productos[$i]['imagen']) ?>"></div>                        
-                            <?php
+                        if ($productos != null) {
+                            $cantidadProductos = sizeof($productos) < 4 ? sizeof($productos) : 4;
+                            for ($i = 0; $i < $cantidadProductos; $i++) {
+                                ?>
+                                <div><a href="html-php/productos/producto?id=<?= $productos[$i]["id"] ?>"><?= $productos[$i]["nombre"] ?></a><img src="data:image/jpg;base64,<?= base64_encode($productos[$i]['imagen']) ?>"></div>                        
+                                <?php
+                            }
                         }
                         ?>
                     </div>

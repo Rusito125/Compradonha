@@ -11,12 +11,26 @@ class CabeceraFooter {
         $productosBD = new ProductosBD();
         $usuariosBD = new UsuariosBD();
         ?>
+        <div id="contenedor_carga">
+            <div id="carga"></div>
+        </div>
+        <script>
+            window.onload = function () {
+                let contenedor = document.getElementById("contenedor_carga");
+                contenedor.style.visibility = "hidden";
+                contenedor.style.opacity = "0";
+                setTimeout(eliminarContenedor, 1000);
+            }
+            function eliminarContenedor() {
+                document.getElementById("contenedor_carga").remove();
+            }
+        </script>  
         <header>            
             <nav>
                 <a id="logo" href="<?= $urlIndex ?>index.php"></a>
                 <a href="<?= $url ?>productos/productos.php">Productos</a>
                 <a href="#" onclick="mostrarMenuUsuario()"><i class="fa-solid fa-user"></i></a>
-                <div id="menuUsuario" class="ocultar">
+                <div id="menuUsuario" class="ocultar ocultos">
                     <?php
                     if (isset($_SESSION["username"])) {
                         $usuario = $usuariosBD->getUsuarioByUsername($_SESSION["username"]);
@@ -25,7 +39,7 @@ class CabeceraFooter {
                         <?php
                         if ($usuario["id_rol"] == 2) {
                             ?>
-                            <a href="<?= $url ?>Gestor.php">Menu de gestión</a>
+                            <a href="<?= $url ?>gestion/Gestor.php">Menu de gestión</a>
                             <?php
                         }
                         ?>
@@ -42,47 +56,49 @@ class CabeceraFooter {
                     function mostrarMenuUsuario() {
                         let menuUsuario = document.getElementById("menuUsuario");
                         if (checkUsuario) {
-                            menuUsuario.className = "ocultar";
+                            menuUsuario.className = "ocultar ocultos";
                             checkUsuario = false;
                         } else {
-                            menuUsuario.className = "mostrar";
+                            menuUsuario.className = "mostrar ocultos";
                             checkUsuario = true;
                         }
                     }
                 </script>
-                <a href="#" id="cuadroBusqueda"><div style="display: none"><form action="<?= $url ?>productos/productos.php" onsubmit="return comprueba()"><input type="text" name="cuadroBusqueda"/></form></div><i class="fa-solid fa-magnifying-glass"></i></a>  
+                <a href="#" id="enlaceBusqueda"><i class="fa-solid fa-magnifying-glass"></i></a>  
+                <div id="cuadroBusqueda" class="ocultar ocultos"><form id="formBusca" action="<?= $url ?>productos/productos.php" onsubmit="return buscar()"><input type="text" name="cuadroBusqueda" id="inputBusca"/><a href="#" onclick="buscar()"><i class="fa-solid fa-magnifying-glass"></i></a></form></div>
                 <script>
-                    let cuadro = document.getElementById('cuadroBusqueda');
-                    let lupa = cuadro.getElementsByTagName("i")[0];
-                    let divCuadro = cuadro.getElementsByTagName("div")[0];
-                    let inputCuadro = divCuadro.getElementsByTagName("form")[0].getElementsByTagName("input")[0];
-                    let clickado = false;
+                    let enlace = document.getElementById("enlaceBusqueda");
 
-                    cuadro.onclick = function () {
-                        if (!clickado) {
-                            if (divCuadro.style.display == "none") {
-                                divCuadro.style.display = "inline";
-                            }
-                            clickado = true;
+                    enlace.addEventListener("click", mostrarCuadro);
+
+                    var checkCuadro = false;
+                    function mostrarCuadro() {
+                        let cuadro = document.getElementById('cuadroBusqueda');
+                        if (checkCuadro) {
+                            cuadro.className = "ocultar ocultarCuadro ocultos";
+                            checkCuadro = false;
+                        } else {
+                            cuadro.className = "mostrar mostrarCuadro ocultos";
+                            checkCuadro = true;
                         }
-                    };
+                    }
 
-                    lupa.onclick = function () {
-                        if (inputCuadro.value != "") {
-                            divCuadro.getElementsByTagName("form")[0].submit();
-                        }
-                    };
-
-                    function comprueba() {
+                    function buscar() {
+                        let formBusca = document.getElementById("formBusca");
                         let correcto = true;
-                        if (inputCuadro.value == "") {
+                        let inputBusca = document.getElementById('inputBusca');
+                        if (inputBusca.value === "") {
                             correcto = false;
+                        }
+                        if (correcto) {
+                            formBusca.submit();
                         }
                         return correcto;
                     }
+
                 </script>
                 <a href="#" onclick="mostrarCarro()"><i class="fa-solid fa-cart-shopping"></i></a>
-                <div id="carro" class="ocultar">
+                <div id="carro" class="ocultarCarro">
                     <?php
                     if (isset($_SESSION["username"])) {
                         require_once 'archivosBD/CarroBD.php';
@@ -110,7 +126,7 @@ class CabeceraFooter {
                             }
                             ?>
                             <h3>Precio total: <?= $precioTotal ?>€</h3>
-                            <button class='caja' onclick="location.href = '<?= $url ?>usuarios/carro.php'">Pasar a caja</button>
+                            <button class='caja' onclick="location.href = '<?= $url ?>compras/compra.php'">Pasar a caja</button>
                             <?php
                         } else {
                             ?>
@@ -134,7 +150,7 @@ class CabeceraFooter {
                                 document.getElementById("carro").innerHTML = this.responseText;
                             }
                         };
-                        xhttp.open("GET", "<?= $url ?>usuarios/carro.php?action=borrar&id=" + idProducto, true);
+                        xhttp.open("GET", "<?= $url ?>compras/carro.php?action=borrar&id=" + idProducto, true);
                         xhttp.send();
                     }
                 </script>
@@ -152,11 +168,11 @@ class CabeceraFooter {
                     var checkCarro = false;
                     function mostrarCarro() {
                         if (isMobile() != null) {
-                            location.href = "<?= $url ?>usuarios/carro.php";
+                            location.href = "<?= $url ?>compras/carro.php";
                         } else {
                             let carro = document.getElementById("carro");
                             if (checkCarro) {
-                                carro.className = "ocultar";
+                                carro.className = "ocultarCarro";
                                 checkCarro = false;
                             } else {
                                 carro.className = "mostrarCarro";
@@ -175,8 +191,8 @@ class CabeceraFooter {
         ?>
         <footer>
             <div>              
-                <a>Contacto</a>
-                <a>Quienes somos</a>
+                <a href="<?= $url ?>gestion/contacto.php">Contacto</a>
+                <a href='<?= $url ?>gestion/quienes.php'>Quienes somos</a>
             </div>
         </footer>
         <?php

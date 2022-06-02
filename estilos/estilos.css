@@ -3,10 +3,54 @@
     Author     : perperpab
 */
 
+
 :root{
     --primary-color: lightsteelblue;
     --secondary-color: white;
     --text-color: black;
+}
+
+*, *:after, *:before{
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+#contenedor_carga{
+    background-color: var(--secondary-color);
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    -webkit-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    z-index: 10000;
+}
+
+#carga{
+    border: 15px solid #ccc;
+    border-top-color: var(--primary-color);
+    border-top-style: groove;
+    height: 100px;
+    width: 100px;
+    border-radius: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    -webkit-animation: girar 1.5s linear infinite;
+    -o-animation: girar 1.5s linear infinite;
+    animation: girar 1.5s linear infinite;
+}
+
+@keyframes girar{
+    from{
+        transform: rotate(0deg);
+    }
+    to{
+        transform: rotate(360deg);
+    }
 }
 
 body{
@@ -42,7 +86,7 @@ button:hover{
 
 header, footer{
     position: fixed;
-    z-index: 1;
+    z-index: 3;
 }
 
 header{
@@ -67,12 +111,6 @@ header nav a:hover{
     background-color: brown;
 }
 
-#cuadroBusqueda div{
-    display: none;
-    -webkit-transition: 1s;
-    transition: 1s;
-}
-
 #logo{
     background-image: url("../img/varios/logo.png");
     background-repeat: no-repeat;
@@ -81,7 +119,30 @@ header nav a:hover{
 }
 
 .ocultar{
-    display: none;
+    position: fixed;
+    top: -50vh;
+    width: 20%;
+    background-color: var(--primary-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: top 0.3s;
+}
+
+.ocultarCuadro{
+    right: 20%;
+    top: -50vh;
+    height: 5vh;
+    justify-content: center;
+}
+
+.ocultos{
+    z-index: -1;
+}
+
+.ocultos a{
+    width: 100%;
+    height: 5vh;
 }
 
 .mostrar{
@@ -92,13 +153,35 @@ header nav a:hover{
     display: flex;
     flex-direction: column;
     align-items: center;
+    transition: top 0.3s;
 }
 
-.mostrarCarro{
+.mostrarCuadro{
+    right: 20%;
+    height: 5vh;
+    justify-content: center;
+}
+
+#formBusca{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+}
+
+#formBusca a{
+    width: 3vw;
+}
+
+#inputBusca{
+    width: 10vw;
+}
+
+#carro {
     position: fixed;
     top: 5vh;
     height: 92%;
-    right: 0;
     width: 20%;
     background-color: var(--primary-color);
     display: flex;
@@ -106,6 +189,22 @@ header nav a:hover{
     align-items: center;
     padding-bottom: 1vh;
     overflow: auto;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+
+    transition: right 0.3s;
+}
+
+#carro.speed-in {
+    right: 0;
+}
+
+.ocultarCarro{
+    right: -100%;
+}
+
+.mostrarCarro{
+    right: 0;
 }
 
 .productoCarro{
@@ -146,7 +245,7 @@ header nav a:hover{
     cursor: pointer;
 }
 
-.mostrar a{
+nav a{
     width: 100%;
     height: 4vh;
 }
@@ -171,6 +270,23 @@ footer{
     background-color: var(--primary-color);
     width: 100%;
 }
+
+footer a{
+    text-decoration: none;
+}
+
+input, select, textarea{
+    border-radius: 0.5em;
+}
+
+h1{
+    font-size: 2.5vw;
+}
+
+h2{
+    font-size: 2vw;
+}
+
 
 @media (prefers-color-scheme: dark) {
 
@@ -215,8 +331,20 @@ footer{
 
 }
 
-@media (max-device-width: 650px){
-    header, footer{
-        font-size: 1.7em;
+@media (max-width: 850px){
+    h1{
+        font-size: 2.5vh;
+    }
+
+    h2{
+        font-size: 2vh;
+    }
+
+    button{
+        font-size: 1.8vh;
+    }
+
+    header nav a, footer{
+        font-size: 1.3vh;
     }
 }

@@ -1,0 +1,175 @@
+header, footer{
+    display: none;
+}
+
+div a img{
+    width: 15vh;
+}
+
+main{
+    margin-top: unset;
+}
+
+main>div{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 5vw;
+    justify-content: center;
+    align-items: center;
+}
+
+section, aside{
+    background-color: var(--primary-color);
+    border-radius: 3em;
+    padding: 2vh;
+}
+
+section{
+    width: 60%;
+}
+
+#datos{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#datos h4{
+    margin-bottom: 0;
+}
+
+#datos>div{
+    display: flex;
+    flex-direction: column;
+    gap: 1vh;
+}
+
+#productos{
+    display: flex;
+    flex-direction: column;
+    gap: 1vh;
+}
+
+#productos>div{
+    display: flex;
+    flex-direction: row;
+}
+
+#productos img{
+    height: inherit;
+    max-width: 100%;
+}
+
+.producto{
+    display: flex;
+    flex-direction: row;
+    gap: 1vh;
+    align-items: center;
+    width: 60%;
+    height: 15vh;
+}
+
+.producto .datos{
+    display: flex;
+    flex-direction: column;
+    gap: 1vh;
+    width: 40%;
+}
+
+.producto .imagen{
+    width: 60%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.cambiarCantidad, div.cantidad a{
+    font-size: 0.8em;
+}
+
+div.cantidad{
+    display: none;
+}
+
+.envio{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5vh;
+    justify-content: center;
+    width: 40%;
+}
+
+.envio h4{
+    margin-bottom: 0.5vh;
+    margin-top: 0;
+}
+
+aside{
+    display: flex;
+    flex-direction: column;
+    height: 40vh;
+    justify-content: center;
+}
+
+aside>div{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#botonAbajo{
+    display: none;
+}
+
+@media (max-width: 850px){
+    main>div{
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 1vw;
+    }
+
+    aside, section{
+        width: 98%;
+    }
+
+    #datos{
+        display: flex;
+        flex-direction: column;
+    }
+
+    #productos>div{
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 2vh;
+    }
+
+    #productos img{
+        width: 90%;
+    }
+
+    .producto{
+        flex-direction: column;
+        height: unset;
+        border: 2px solid black;
+        border-radius: 2em;
+    }
+
+    .envio, .producto, .producto .imagen{
+        width: unset;
+    }
+    
+    .producto .datos{
+        width: 100%;
+        padding-left: 3vh;
+    }
+    
+    #botonAbajo{
+        display: block;
+        order: -1;
+    }
+    
+    #botonAbajo button{
+        width: 100%;
+    }
+}
