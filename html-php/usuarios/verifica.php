@@ -58,14 +58,14 @@ $_action = isset($_GET["action"]) ? $_GET["action"] : "";
                 $mail = new PHPMailer(true);
                 try {
                     $mail->isSMTP();
-                    $mail->SMTPSecure = 'tls';
-                    $mail->Host = 'smtp.ionos.es';
-                    $mail->Port = 587;
+                    $mail->SMTPSecure = '';
+                    $mail->Host = '';
+                    $mail->Port = ;
                     $mail->SMTPAuth = true;
-                    $mail->Username = 'contacto@mercadonha.es';
-                    $mail->Password = 'CompradonhaContacto123.';
+                    $mail->Username = '';
+                    $mail->Password = '';
 
-                    $mail->setFrom('contacto@mercadonha.es', 'Verificación de cuenta');
+                    $mail->setFrom('', '');
                     $mail->addAddress($usuario["mail"], $usuario["nombre"]);
 
                     $mail->isHTML(true);
@@ -73,7 +73,7 @@ $_action = isset($_GET["action"]) ? $_GET["action"] : "";
                     $mail->Body = "Hola " . $usuario["nombre"] . " " . $usuario["apellidos"] . ".<br/>"
                             . "Este correo ha sido generado automáticamente porque has creado una cuenta.<br/>"
                             . "Si usted es " . $usuario["nombre"] . " haga click en el siguiente enlace para finalizar su registro:<br/>"
-                            . "<a href='http://mercadonha.es/html-php/usuarios/verifica?action=verificado&cod=" . hash("sha256", $_GET["user"]) . "'>Verificar cuenta</a><br/>"
+                            . "<a href='http://mercadonha.es/html-php/usuarios/verifica?action=verificado&cod=" .  . "'>Verificar cuenta</a><br/>"
                             . "Si usted no es " . $usuario["nombre"] . " ignore este correo y bórrelo.<br/>"
                             . "Gracias por confiar en nosotros.<br/>"
                             . "Compradoña";
