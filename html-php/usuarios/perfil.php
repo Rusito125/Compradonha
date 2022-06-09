@@ -23,6 +23,9 @@
                 case "cerrar":
                     cerrarSesion();
                     break;
+					case "darBaja":
+                    darBaja();
+                    break;
                 default:
                     verUsuario();
             }
@@ -62,7 +65,8 @@
                             <li><span>Comunidad Autónoma:</span><b><?= $usuario["comunidad"] ?></b></li>
                             <li><span>Correo electrónico:</span><b><?= $usuario["mail"] ?></b></li>
                             <li id="editarPerfil"><div><button class="open-modal" data-open="modal" onclick="mostrarComunidades()">Editar pefil</button></div></li>
-                        </ul>
+                       <li id="darBaja"><div><button onclick="location.href = 'perfil.php?action=darBaja'">Darse de baja</button></div></li>
+					   </ul>
                     </div>
                     <div class="modal" id="modal">
                         <div class="modal-dialog">
@@ -416,6 +420,20 @@
             </main>            
             <?php
             $cabeceraFooter->footer();
+        }
+
+function darBaja() {
+            require_once '../archivosBD/UsuariosBD.php';
+            $usuariosBD = new UsuariosBD();
+            if ($usuariosBD->borrarUsuarioUsername($_SESSION["username"])) {
+                unset($_SESSION["username"]);
+                setcookie("PHPSESSID", "valor", time() - 3600);
+                session_unset();
+                session_destroy();
+                header("Location: ../../index.php");
+            } else{
+                echo "Error al darse de baja";
+            }
         }
 
         function cerrarSesion() {

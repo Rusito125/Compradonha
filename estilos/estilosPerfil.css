@@ -150,7 +150,7 @@ section{
     text-align: right;
 }
 
-#perfil div ul #editarPerfil div{
+#perfil div ul #editarPerfil div, #perfil div ul #darBaja div{
     grid-column: 1 / 3;
     text-align: center;
 }

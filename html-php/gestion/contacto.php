@@ -41,6 +41,7 @@
                     <a><i class="fa-brands fa-instagram"></i></a>
                     <a><i class="fa-brands fa-tiktok"></i></a>
                     <a><i class="fa-brands fa-google-plus-g"></i></a>
+                    <a href="https://youtu.be/sJm1-xu5BEw"><i class="fa-brands fa-youtube"></i></a>
                 </p>
             </section>
         </main>

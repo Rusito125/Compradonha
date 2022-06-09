@@ -43,7 +43,7 @@
                         <h2>Bienvenido <?= $usuario["nombre"] ?></h2>
                         <button onclick="location.href = 'html-php/usuarios/perfil'">Mi perfil</button>    
                         <?php
-                        // $juegos->juegoDino();
+                        $juegos->juegoDino();
                     } else {
                         ?>
                         <div>

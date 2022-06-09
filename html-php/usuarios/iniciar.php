@@ -92,6 +92,7 @@ $_action = isset($_GET["action"]) ? $_GET["action"] : "";
                 <?php
                 if (isset($_POST["username"]) && isset($_POST["passw"])) {
                     $usuariosBD = new UsuariosBD();
+					if ($usuariosBD->existeUsuario($_POST["username"])) {
                     $sesion = $usuariosBD->getSesion($_POST["username"]);
                     if ($sesion["verificado"]) {
                         if ($usuariosBD->comprobarPasswd($_POST["username"], hash("sha256", $_POST["passw"]))) {
@@ -116,6 +117,13 @@ $_action = isset($_GET["action"]) ? $_GET["action"] : "";
                         </script>
                         <?php
                     }
+					} else {
+                    ?>
+                    <script>
+                        alert("El usuario no existe");
+                    </script>
+                    <?php
+                }
                 }
             }
 

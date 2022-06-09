@@ -62,7 +62,7 @@ if ($_action != 'borrar') {
                     <form method="post" enctype="multipart/form-data" id="miForm">
                         <h4>Añadir productos</h4>      
                         <label for="nombre">Nombre: </label>
-                        <input type="text" name="nombre" value="<?= $id != null ? $producto["nombre"] : "" ?>" required/>
+                        <input type="text" name="nombre" maxlength="20" value="<?= $id != null ? $producto["nombre"] : "" ?>" required/>
                         <label for="nombre">Descripción: </label>
                         <textarea size="500" name="descripcion"><?= $id != null ? $producto["descripcion"] : "" ?></textarea>
                         <label for="precio">Precio: </label>

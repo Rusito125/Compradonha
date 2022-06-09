@@ -66,6 +66,7 @@ div.runner-container{
     margin-right: 4%;
     margin-bottom: 6vh;
     justify-items: center;
+    gap: 3vh;
 }
 
 #imgNov div{
@@ -74,7 +75,6 @@ div.runner-container{
     justify-content: center;
     align-items: center;
     width: 80%;
-    height: 80%;
     background-color: white;
     border-radius: 2em;
 }

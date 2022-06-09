@@ -127,12 +127,12 @@ class UsuariosBD {
         }
         return $correcto;
     }
-
-    function existeUsuario($username) {
+function existeUsuario($username) {
         $pdo = new AccesoBD();
         $pdo = $pdo->abrirConexion();
         $existe = false;
-        if ($pdo->query("SELECT * FROM sesiones WHERE username = '$username'")) {
+        $result = $pdo->query("SELECT * FROM sesiones WHERE username = '$username'");
+        if ($result->rowCount() > 0) {
             $existe = true;
         }
         return $existe;
@@ -160,6 +160,18 @@ class UsuariosBD {
             $usuarios = $result->fetchAll();
         }
         return $usuarios;
+    }
+
+function borrarUsuarioUsername($username){
+        $pdo = new AccesoBD();
+        $pdo = $pdo->abrirConexion();
+        $correcto = false;
+        $sesion = $this->getSesion($username);        
+        $borrar = $pdo->prepare("DELETE FROM usuarios WHERE id = ?");
+        if($borrar->execute(array($sesion["id_usuario"]))){
+            $correcto = true;
+        }
+        return $correcto;
     }
 
 }

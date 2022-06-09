@@ -107,7 +107,7 @@ if (isset($_SESSION["username"])) {
                 $productosCarro = $carroBD->getProductosCarro($usuario["id"]);
                 ?>
                 <div>
-                    <a href="../../index.php"><img src="../../img/varios/Logo.png"/></a>
+                    <a href="../../index.php"><img src="../../img/varios/logo.png"/></a>
                 </div>
                 <main>
                     <h1>Revisar tu pedido</h1>
