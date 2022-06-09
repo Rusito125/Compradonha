@@ -429,14 +429,14 @@ $_action = isset($_GET["action"]) ? $_GET["action"] : "";
                             $mail = new PHPMailer(true);
                             try {
                                 $mail->isSMTP();
-                                $mail->SMTPSecure = 'tls';
-                                $mail->Host = 'smtp.ionos.es';
-                                $mail->Port = 587;
+                                $mail->SMTPSecure = '';
+                                $mail->Host = '';
+                                $mail->Port = ;
                                 $mail->SMTPAuth = true;
-                                $mail->Username = 'contacto@mercadonha.es';
-                                $mail->Password = 'CompradonhaContacto123.';
+                                $mail->Username = '';
+                                $mail->Password = '';
 
-                                $mail->setFrom('contacto@mercadonha.es', 'Recordatorio password');
+                                $mail->setFrom('', '');
                                 $mail->addAddress($usuario["mail"], $usuario["nombre"]);
 
                                 $mail->isHTML(true);
@@ -444,7 +444,7 @@ $_action = isset($_GET["action"]) ? $_GET["action"] : "";
                                 $mail->Body = "Hola " . $usuario["nombre"] . " " . $usuario["apellidos"] . ".<br/>"
                                         . "Este correo ha sido generado automáticamente porque has olvidado la contraseña.<br/>"
                                         . "Si usted es " . $usuario["nombre"] . " haga click en el siguiente enlace para crear una nueva contraseña:<br/>"
-                                        . "<a href='http://mercadonha.es/html-php/usuarios/iniciar?action=enlaceRecup&cod=" . hash("sha256", $_POST["username"]) . "'>Crear nueva contraseña</a><br/>"
+                                        . "<a href='http://mercadonha.es/html-php/usuarios/iniciar?action=enlaceRecup&cod=" .. "'>Crear nueva contraseña</a><br/>"
                                         . "Si usted no es " . $usuario["nombre"] . " ignore este correo y bórrelo.<br/>"
                                         . "Gracias por confiar en nosotros.<br/>"
                                         . "Compradoña";
